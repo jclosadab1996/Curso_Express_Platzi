@@ -1,9 +1,11 @@
-const express = require('express');
+require("dotenv").config();
+const express = require("express");
 const app = express();
 
 const PORT = process.env.PORT || 3000;
+console.log(PORT);
 
-app.get('/', (req, res) => {
+app.get("/", (req, res) => {
   res.send(`
       <h1>Curso Express.js V3</h1>
       <p>Esto es una aplicación node.js con express.js</p>
@@ -12,5 +14,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}`);
+  console.log(`Servidor: http://localhost:${PORT}`);
 });
