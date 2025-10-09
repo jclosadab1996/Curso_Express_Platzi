@@ -4,11 +4,11 @@ function isValidEmail(email) {
 }
 
 function isValidName(name) {
-  return typeof name === "string" && name.length >= 3;
+  return typeof name === 'string' && name.length >= 3;
 }
 
 function isUniqueNumericId(id, users) {
-  return typeof id === "number" && !users.some((user) => user.id === id);
+  return typeof id === 'number' && !users.some(user => user.id === id);
 }
 
 function validateUser(user, users) {
@@ -16,14 +16,14 @@ function validateUser(user, users) {
   if (!isValidName(name)) {
     return {
       isValid: false,
-      error: "El nombre debe tener al menos 3 caracteres.",
+      error: 'El nombre debe tener al menos 3 caracteres.'
     };
   }
   if (!isValidEmail(email)) {
-    return { isValid: false, error: "El correo electrónico no es válido." };
+    return { isValid: false, error: 'El correo electrónico no es válido.' };
   }
   if (!isUniqueNumericId(id, users)) {
-    return { isValid: false, error: "El ID debe ser numérico y único." };
+    return { isValid: false, error: 'El ID debe ser numérico y único.' };
   }
   return { isValid: true };
 }
@@ -32,5 +32,5 @@ module.exports = {
   isValidEmail,
   isValidName,
   isUniqueNumericId,
-  validateUser,
+  validateUser
 };

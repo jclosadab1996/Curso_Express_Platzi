@@ -1,12 +1,12 @@
 {
   "dependencies": {
-    "@prisma/client": "^6.16.2",
+    "@prisma/client": "^6.4.1",
     "bcryptjs": "^3.0.2",
-    "body-parser": "^2.2.0",
-    "dotenv": "^17.2.2",
+    "body-parser": "^1.20.3",
+    "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
-    "pg": "^8.16.3"
+    "pg": "^8.13.3"
   },
   "name": "curso-expressjs",
   "version": "1.0.0",
@@ -20,9 +20,9 @@
   "keywords": [
     "['expressjs']"
   ],
-  "author": "Juan Camilo Losada",
+  "author": "Oscar Barajas <oscar@platzi.com>",
   "license": "MIT",
   "devDependencies": {
-    "prisma": "^6.16.2"
+    "prisma": "^6.4.1"
   }
 }

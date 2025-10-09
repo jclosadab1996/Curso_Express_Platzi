@@ -1,20 +1,20 @@
-require("dotenv").config();
-const express = require("express");
-const { PrismaClient } = require("@prisma/client");
+require('dotenv').config();
+const express = require('express');
+const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
-const LoggerMiddleware = require("./middlewares/logger");
-const errorHandler = require("./middlewares/errorHandler");
-const { validateUser } = require("./utils/validation");
-const authenticateToken = require("./middlewares/auth");
+const LoggerMiddleware = require('./middlewares/logger');
+const errorHandler = require('./middlewares/errorHandler');
+const { validateUser } = require('./utils/validation');
+const authenticateToken = require('./middlewares/auth');
 
-const bodyParser = require("body-parser");
+const bodyParser = require('body-parser');
 
-const fs = require("fs");
-const path = require("path");
-const usersFilePath = path.join(__dirname, "users.json");
+const fs = require('fs');
+const path = require('path');
+const usersFilePath = path.join(__dirname, 'users.json');
 
 const app = express();
 app.use(bodyParser.json());
@@ -25,70 +25,70 @@ app.use(errorHandler);
 const PORT = process.env.PORT || 3000;
 console.log(PORT);
 
-app.get("/", (req, res) => {
+app.get('/', (req, res) => {
   res.send(`
       <h1>Curso Express.js V3</h1>
-      <p>Esto es una aplicaciÃ³n node.js con express.js</p>
+      <p>Esto es una aplicación node.js con express.js</p>
       <p>Corre en el puerto: ${PORT}</p>
     `);
 });
 
-app.get("/users/:id", (req, res) => {
+app.get('/users/:id', (req, res) => {
   const userId = req.params.id;
-  res.send(`Mostrar informaciÃ³n del usuario con ID: ${userId}`);
+  res.send(`Mostrar información del usuario con ID: ${userId}`);
 });
 
-app.get("/search", (req, res) => {
-  const terms = req.query.termino || "No especificado";
-  const category = req.query.categoria || "Todas";
+app.get('/search', (req, res) => {
+  const terms = req.query.termino || 'No especificado';
+  const category = req.query.categoria || 'Todas';
 
   res.send(`
       <h2>Resultados de Busqueda:</h2>
-      <p>TÃ©rmino: ${terms}</p>
-      <p>CategorÃ­a: ${category}</p>
+      <p>Término: ${terms}</p>
+      <p>Categoría: ${category}</p>
     `);
 });
 
-app.post("/form", (req, res) => {
-  const name = req.body.nombre || "AnÃ³nimo";
-  const email = req.body.email || "No proporcionado";
+app.post('/form', (req, res) => {
+  const name = req.body.nombre || 'Anónimo';
+  const email = req.body.email || 'No proporcionado';
   res.json({
-    message: "Datos recibidos",
+    message: 'Datos recibidos',
     data: {
       name,
-      email,
-    },
+      email
+    }
   });
 });
 
-app.post("/api/data", (req, res) => {
+app.post('/api/data', (req, res) => {
   const data = req.body;
 
   if (!data || Object.keys(data).length === 0) {
-    return res.status(400).json({ error: "No se recibieron datos" });
+    return res.status(400).json({ error: 'No se recibieron datos' });
   }
 
   res.status(201).json({
-    message: "Datos JSON recibidos",
-    data,
+    message: 'Datos JSON recibidos',
+    data
   });
 });
 
-app.get("/users", (req, res) => {
-  fs.readFile(usersFilePath, "utf-8", (err, data) => {
+app.get('/users', (req, res) => {
+  fs.readFile(usersFilePath, 'utf-8', (err, data) => {
     if (err) {
-      return res.status(500).json({ error: "Error con conexiÃ³n de datos." });
+      return res.status(500).json({ error: 'Error con conexión de datos.' });
     }
     const users = JSON.parse(data);
     res.json(users);
   });
 });
 
-app.post("/users", (req, res) => {
+app.post('/users', (req, res) => {
   const newUser = req.body;
-  fs.readFile(usersFilePath, "utf-8", (err, data) => {
+  fs.readFile(usersFilePath, 'utf-8', (err, data) => {
     if (err) {
-      return res.status(500).json({ error: "Error con conexiÃ³n de datos." });
+      return res.status(500).json({ error: 'Error con conexión de datos.' });
     }
     const users = JSON.parse(data);
 
@@ -98,22 +98,22 @@ app.post("/users", (req, res) => {
     }
 
     users.push(newUser);
-    fs.writeFile(usersFilePath, JSON.stringify(users, null, 2), (err) => {
+    fs.writeFile(usersFilePath, JSON.stringify(users, null, 2), err => {
       if (err) {
-        return res.status(500).json({ error: "Error al guardar el usuario." });
+        return res.status(500).json({ error: 'Error al guardar el usuario.' });
       }
       res.status(201).json(newUser);
     });
   });
 });
 
-app.put("/users/:id", (req, res) => {
+app.put('/users/:id', (req, res) => {
   const userId = parseInt(req.params.id, 10);
   const updatedUser = req.body;
 
-  fs.readFile(usersFilePath, "utf8", (err, data) => {
+  fs.readFile(usersFilePath, 'utf8', (err, data) => {
     if (err) {
-      return res.status(500).json({ error: "Error con conexiÃ³n de datos." });
+      return res.status(500).json({ error: 'Error con conexión de datos.' });
     }
     let users = JSON.parse(data);
 
@@ -122,57 +122,57 @@ app.put("/users/:id", (req, res) => {
       return res.status(400).json({ error: validation.error });
     }
 
-    users = users.map((user) =>
+    users = users.map(user =>
       user.id === userId ? { ...user, ...updatedUser } : user
     );
-    fs.writeFile(usersFilePath, JSON.stringify(users, null, 2), (err) => {
+    fs.writeFile(usersFilePath, JSON.stringify(users, null, 2), err => {
       if (err) {
         return res
           .status(500)
-          .json({ error: "Error al actualizar el usuario" });
+          .json({ error: 'Error al actualizar el usuario' });
       }
       res.json(updatedUser);
     });
   });
 });
 
-app.delete("/users/:id", (req, res) => {
+app.delete('/users/:id', (req, res) => {
   const userId = parseInt(req.params.id, 10);
-  fs.readFile(usersFilePath, "utf8", (err, data) => {
+  fs.readFile(usersFilePath, 'utf8', (err, data) => {
     if (err) {
-      return res.status(500).json({ error: "Error con conexiÃ³n de datos." });
+      return res.status(500).json({ error: 'Error con conexión de datos.' });
     }
     let users = JSON.parse(data);
-    users = users.filter((user) => user.id !== userId);
-    fs.writeFile(usersFilePath, JSON.stringify(users, null, 2), (err) => {
+    users = users.filter(user => user.id !== userId);
+    fs.writeFile(usersFilePath, JSON.stringify(users, null, 2), err => {
       if (err) {
-        return res.status(500).json({ error: "Error al eliminar usuario." });
+        return res.status(500).json({ error: 'Error al eliminar usuario.' });
       }
       res.status(204).send();
     });
   });
 });
 
-app.get("/error", (req, res, next) => {
-  next(new Error("Error Intencional"));
+app.get('/error', (req, res, next) => {
+  next(new Error('Error Intencional'));
 });
 
-app.get("/db-users", async (req, res) => {
+app.get('/db-users', async (req, res) => {
   try {
     const users = await prisma.user.findMany();
     res.json(users);
   } catch (error) {
     res
       .status(500)
-      .json({ error: "Error al comunicarse con la base de datos." });
+      .json({ error: 'Error al comunicarse con la base de datos.' });
   }
 });
 
-app.get("/protected-route", authenticateToken, (req, res) => {
-  res.send("Esta es una ruta protegida.");
+app.get('/protected-route', authenticateToken, (req, res) => {
+  res.send('Esta es una ruta protegida.');
 });
 
-app.post("/register", async (req, res) => {
+app.post('/register', async (req, res) => {
   const { email, password, name } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -181,27 +181,27 @@ app.post("/register", async (req, res) => {
       email,
       password: hashedPassword,
       name,
-      role: "USER",
-    },
+      role: 'USER'
+    }
   });
-  res.status(201).json({ message: "User Registered Successfully" });
+  res.status(201).json({ message: 'User Registered Successfully' });
 });
 
-app.post("/login", async (req, res, next) => {
+app.post('/login', async (req, res, next) => {
   const { email, password } = req.body;
   const user = await prisma.user.findUnique({ where: { email } });
 
   if (!user)
-    return res.status(400).json({ error: "Invalid email or password" });
+    return res.status(400).json({ error: 'Invalid email or password' });
   const validPassword = await bcrypt.compare(password, user.password);
 
   if (!validPassword)
-    res.status(400).json({ error: "Invalid email or password" });
+    res.status(400).json({ error: 'Invalid email or password' });
 
   const token = jwt.sign(
     { id: user.id, role: user.role },
     process.env.JWT_SECRET,
-    { expiresIn: "4h" }
+    { expiresIn: '4h' }
   );
 
   res.json({ token });
